@@ -1,6 +1,6 @@
 
 from django.test import TestCase
-from django.conrib.auth import get_user_model
+from django.contrib.auth import get_user_model
 from django.urls import reverse
 from .models import Post
 
@@ -22,7 +22,7 @@ class PostTests(TestCase):
         self.assertEqual(str(post), post.title)
 
     def test_get_absolute_url(self):
-        self.assertEqual(self.post.get_absolute_url(), '/posts/1')
+        self.assertEqual(self.post.get_absolute_url(), '/post/1/')
 
     def test_post_content(self):
         self.assertEqual(f"{self.post.title}", "A title")
@@ -48,17 +48,17 @@ class PostTests(TestCase):
     def test_post_create_view(self):
         response = self.client.post(reverse('post_new'), {
             'title': 'New title',
-            'body': "New content",
+            'text': "New content",
             'author': self.user.id
         })
         self.assertEqual(response.status_code, 302)
         self.assertEqual(Post.objects.last().title, "New title")
-        self.assertEqual(Post.objects.last().body, "New content")
+        self.assertEqual(Post.objects.last().text, "New content")
 
     def test_post_update_view(self):
         response = self.client.post(reverse('post_edit', args='1'),{
             'title': 'Update title',
-            'body': 'Update content'
+            'text': 'Update content',
         })
         self.assertEqual(response.status_code, 302)
 
